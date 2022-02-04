@@ -5,8 +5,36 @@ import Input from "../components/Input";
 import { Title } from "../components/Title";
 import Link from "next/link";
 import Checkbox from "../components/Checkbox";
+import { useForm, FieldValues } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-const signup = () => {
+export interface ISignInForm {
+  email: string;
+  password: string;
+}
+
+const Signup = () => {
+  const { handleSubmit, control, reset } = useForm<FieldValues>({});
+
+  const SignInUser = async (data: FieldValues) => {
+    const endpoint = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/signin`;
+    return await axios.post(endpoint, data);
+  };
+
+  const onSubmit = async (data: FieldValues) => {
+    toast.promise(SignInUser(data), {
+      loading: "Signing up...",
+      success: ({ data }) => {
+        console.log(11, data);
+        return data.message;
+      },
+      error: ({ response }) => {
+        return response.data.message;
+      },
+    });
+  };
+
   return (
     <div>
       <Head>
@@ -31,19 +59,29 @@ const signup = () => {
               </>
             }
           />
-          <Input label="Email address" placeholder="johndoe@email.com" />
-          <Input
-            label="Password"
-            placeholder="8 Characters long password"
-            type="password"
-          />
-          <Checkbox label="Remember me" />
-          <br />
-          <br />
-          <Button title="Create account" />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Input
+              label="Email address"
+              name="email"
+              type="email"
+              control={control}
+              placeholder="johndoe@email.com"
+            />
+            <Input
+              label="Password"
+              placeholder="8 Characters long password"
+              name="password"
+              type="password"
+              control={control}
+            />
+            <Checkbox label="Remember me" />
+            <br />
+            <br />
+            <Button title="Sign In" type="submit" />
+          </form>
         </div>
       </div>
     </div>
   );
 };
-export default signup;
+export default Signup;
