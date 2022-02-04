@@ -5,6 +5,8 @@ import Input from "../components/Input";
 import { Title } from "../components/Title";
 import Link from "next/link";
 import { useForm, FieldValues } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export interface ISignUpForm {
   firstName: string;
@@ -15,7 +17,25 @@ export interface ISignUpForm {
 
 const Signup = () => {
   const { handleSubmit, control, reset } = useForm<FieldValues>({});
-  const onSubmit = (data: FieldValues) => console.log(data);
+
+  const SignUpUser = async (data: FieldValues) => {
+    const endpoint = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/signup`;
+    return await axios.post(endpoint, data);
+  };
+
+  const onSubmit = async (data: FieldValues) => {
+    console.log(111, data);
+
+    toast.promise(SignUpUser(data), {
+      loading: "Signing up...",
+      success: ({ data }) => {
+        return data.message;
+      },
+      error: ({ response }) => {
+        return response.data.message;
+      },
+    });
+  };
 
   return (
     <div>
