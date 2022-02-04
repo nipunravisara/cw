@@ -4,8 +4,39 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import { Title } from "../components/Title";
 import Link from "next/link";
+import { useForm, FieldValues } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-const signup = () => {
+export interface ISignUpForm {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+const Signup = () => {
+  const { handleSubmit, control, reset } = useForm<FieldValues>({});
+
+  const SignUpUser = async (data: FieldValues) => {
+    const endpoint = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/signup`;
+    return await axios.post(endpoint, data);
+  };
+
+  const onSubmit = async (data: FieldValues) => {
+    console.log(111, data);
+
+    toast.promise(SignUpUser(data), {
+      loading: "Signing up...",
+      success: ({ data }) => {
+        return data.message;
+      },
+      error: ({ response }) => {
+        return response.data.message;
+      },
+    });
+  };
+
   return (
     <div>
       <Head>
@@ -30,21 +61,40 @@ const signup = () => {
               </>
             }
           />
-          <Input label="First name" placeholder="John" />
-          <Input label="Last name" placeholder="Doe" />
-          <Input label="Email address" placeholder="johndoe@email.com" />
-          <Input
-            label="Password"
-            placeholder="8 Characters long password"
-            type="password"
-          />
-          {/* <Checkbox label="Remember me" /> */}
-          <br />
-          <br />
-          <Button title="Create account" />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Input
+              label="First name"
+              placeholder="John"
+              name="firstName"
+              control={control}
+            />
+            <Input
+              label="Last name"
+              placeholder="Doe"
+              name="lastName"
+              control={control}
+            />
+            <Input
+              label="Email address"
+              placeholder="johndoe@email.com"
+              name="email"
+              type="email"
+              control={control}
+            />
+            <Input
+              label="Password"
+              placeholder="8 Characters long password"
+              type="password"
+              name="password"
+              control={control}
+            />
+            <br />
+            <br />
+            <Button title="Create account" type="submit" />
+          </form>
         </div>
       </div>
     </div>
   );
 };
-export default signup;
+export default Signup;
