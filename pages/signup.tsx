@@ -24,11 +24,10 @@ const Signup = () => {
   };
 
   const onSubmit = async (data: FieldValues) => {
-    console.log(111, data);
-
     toast.promise(SignUpUser(data), {
       loading: "Signing up...",
       success: ({ data }) => {
+        console.log(11, data);
         return data.message;
       },
       error: ({ response }) => {
