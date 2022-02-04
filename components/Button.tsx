@@ -2,12 +2,15 @@ import React, { ReactElement } from "react";
 
 interface IButton {
   title: string;
+  type?: string;
 }
-const Button = ({ title }: IButton): ReactElement => {
+const Button = ({ title, type }: IButton): ReactElement => {
   return (
-    <div className="border-1 bg-blue-500 hover:bg-blue-700 hover:cursor-pointer text-white font-semibold py-3 text-center px-4 rounded my-2 ">
-      {title}
-    </div>
+    <input
+      type={type || "button"}
+      value={title}
+      className="px-4 py-3 my-2 w-full font-semibold text-center text-white bg-blue-500 rounded border-1 hover:bg-blue-700 hover:cursor-pointer"
+    />
   );
 };
 

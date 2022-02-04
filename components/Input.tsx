@@ -1,25 +1,37 @@
 import React from "react";
+import {
+  useController,
+  Control,
+  UseControllerProps,
+  FieldValues,
+} from "react-hook-form";
+import { ISignUpForm } from "../pages/signup";
 
 interface IInput {
   label: string;
   placeholder: string;
   type?: string;
+  name: string;
+  control: Control;
 }
 
-const Input = ({ label, placeholder, type }: IInput) => {
+const Input = (props: IInput & UseControllerProps<FieldValues>) => {
+  const { field } = useController(props);
+
   return (
     <div className="py-3">
       <label
-        className="tracking-wide text-gray-700 text-xs"
-        htmlFor={`grid-${label}`}
+        className="text-xs tracking-wide text-gray-700"
+        htmlFor={`grid-${props.name}`}
       >
-        {label}
+        {props.label}
       </label>
       <input
-        className="appearance-none block w-full bg-white text-gray-700 border border-gray-200 rounded mt-1 text-sm py-3 px-4 leading-tight focus:outline-none focus:border-primary-fade"
-        id={`grid-${label}`}
-        type={type || "text"}
-        placeholder={placeholder}
+        className="block px-4 py-3 mt-1 w-full text-sm leading-tight text-gray-700 bg-white rounded border border-gray-200 appearance-none focus:outline-none focus:border-primary-fade"
+        id={`grid-${props.name}`}
+        placeholder={props.placeholder}
+        type={props.type || "text"}
+        {...field}
       />
     </div>
   );
