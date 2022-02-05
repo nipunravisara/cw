@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useForm, FieldValues } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+import { useRouter } from "next/router";
 export interface ISignUpForm {
   firstName: string;
   lastName: string;
@@ -16,6 +16,7 @@ export interface ISignUpForm {
 }
 
 const Signup = () => {
+  const router = useRouter();
   const { handleSubmit, control, reset } = useForm<FieldValues>({});
 
   const SignUpUser = async (data: FieldValues) => {
@@ -27,7 +28,7 @@ const Signup = () => {
     toast.promise(SignUpUser(data), {
       loading: "Signing up...",
       success: ({ data }) => {
-        console.log(11, data);
+        router.push("/signin");
         return data.message;
       },
       error: ({ response }) => {

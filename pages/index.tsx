@@ -1,12 +1,13 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import WithPrivateRoute from "../components/withPrivateRoute";
 
 const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Dashboard</title>
       </Head>
 
       <main>
@@ -31,4 +32,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default WithPrivateRoute(Home);

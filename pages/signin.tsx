@@ -8,6 +8,7 @@ import Checkbox from "../components/Checkbox";
 import { useForm, FieldValues } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 export interface ISignInForm {
   email: string;
@@ -15,6 +16,7 @@ export interface ISignInForm {
 }
 
 const Signup = () => {
+  const router = useRouter();
   const { handleSubmit, control, reset } = useForm<FieldValues>({});
 
   const SignInUser = async (data: FieldValues) => {
@@ -24,9 +26,9 @@ const Signup = () => {
 
   const onSubmit = async (data: FieldValues) => {
     toast.promise(SignInUser(data), {
-      loading: "Signing up...",
+      loading: "Signing in...",
       success: ({ data }) => {
-        console.log(11, data);
+        router.push("/");
         return data.message;
       },
       error: ({ response }) => {
